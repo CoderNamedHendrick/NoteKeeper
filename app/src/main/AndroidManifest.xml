@@ -9,7 +9,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CourseNoteKeeper">
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".NoteListActivity"
+            android:label="@string/title_activity_note_list"
+            android:theme="@style/Theme.CourseNoteKeeper.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".NoteActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
