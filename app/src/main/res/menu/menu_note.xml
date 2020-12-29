@@ -4,7 +4,10 @@
 
 
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_send_mail"
         android:title="Send as Email"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_cancel"
+        android:title="Cancel" />
 </menu>
