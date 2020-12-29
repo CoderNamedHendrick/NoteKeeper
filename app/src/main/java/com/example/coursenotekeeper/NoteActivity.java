@@ -17,8 +17,13 @@ import java.util.List;
 
 public class NoteActivity extends AppCompatActivity {
 
-    public static final String NOTE_INFO = "com.example.coursenotekeeper.NOTE_INFO";
+    public static final String NOTE_POSITION = "com.example.coursenotekeeper.NOTE_POSITION";
+    public static final int POSITION_NOT_SET = -1;
     private NoteInfo mNote;
+    private boolean mIsNewNote;
+    private EditText mTextNoteTitle;
+    private EditText mTextNoteText;
+    private Spinner mSpinnerCourses;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,21 +32,22 @@ public class NoteActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Spinner spinnerCourses = findViewById(R.id.spinner_courses);
+        mSpinnerCourses = findViewById(R.id.spinner_courses);
 
         List<CourseInfo> courses = DataManager.getInstance().getCourses();
         ArrayAdapter<CourseInfo> adapterCourses =
                 new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, courses);
 
         adapterCourses.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerCourses.setAdapter(adapterCourses);
+        mSpinnerCourses.setAdapter(adapterCourses);
 
         readDisplayStateValues();
 
-        EditText textNoteTitle = findViewById(R.id.text_note_title);
-        EditText textNoteText = findViewById(R.id.text_note_text);
+        mTextNoteTitle = findViewById(R.id.text_note_title);
+        mTextNoteText = findViewById(R.id.text_note_text);
 
-        displayNote(spinnerCourses, textNoteTitle, textNoteText);
+        if (!mIsNewNote)
+            displayNote(mSpinnerCourses, mTextNoteTitle, mTextNoteText);
     }
 
     private void displayNote(Spinner spinnerCourses, EditText textNoteTitle, EditText textNoteText) {
@@ -55,7 +61,11 @@ public class NoteActivity extends AppCompatActivity {
 
     private void readDisplayStateValues() {
         Intent intent = getIntent();
-        mNote = intent.getParcelableExtra(NOTE_INFO);
+        int position = intent.getIntExtra(NOTE_POSITION, POSITION_NOT_SET);
+
+        mIsNewNote = position == POSITION_NOT_SET;
+        if (!mIsNewNote)
+            mNote = DataManager.getInstance().getNotes().get(position);
     }
 
 
@@ -66,6 +76,24 @@ public class NoteActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        int id = item.getItemId();
+
+        if (id == R.id.action_settings){
+            sendEmail();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    private void sendEmail() {
+        CourseInfo course = (CourseInfo) mSpinnerCourses.getSelectedItem();
+        String subject = mTextNoteText.getText().toString();
+        String text = "Check out what I learned in the pluralsight course\"" +
+                course.getTitle() + "\"\n" + mTextNoteText.getText();
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("message/rfc2822");
     }
 }
