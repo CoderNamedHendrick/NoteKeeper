@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CourseNoteKeeper">
         <activity
-            android:name=".NoteListActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.CourseNoteKeeper.NoActionBar">
             <intent-filter>
@@ -19,11 +19,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".NoteActivity"
-            android:label="@string/title_activity_note"
+        <activity
+            android:name=".NoteListActivity"
+            android:label="@string/app_name"
             android:theme="@style/Theme.CourseNoteKeeper.NoActionBar">
-
         </activity>
+        <activity
+            android:name=".NoteActivity"
+            android:label="@string/title_activity_note"
+            android:theme="@style/Theme.CourseNoteKeeper.NoActionBar"></activity>
     </application>
 
 </manifest>
