@@ -17,6 +17,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,6 +29,8 @@ implements NavigationView.OnNavigationItemSelectedListener{
     private NoteRecyclerAdapter mNoteRecyclerAdapter;
     private RecyclerView mRecyclerItems;
     private LinearLayoutManager mNoteLayoutManager;
+    private CourseRecyclerAdapter mCourseRecyclerAdapter;
+    private GridLayoutManager mCourseLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,9 +72,14 @@ implements NavigationView.OnNavigationItemSelectedListener{
     private void InitialiseDisplayContent() {
         mRecyclerItems = (RecyclerView) findViewById(R.id.list_items);
         mNoteLayoutManager = new LinearLayoutManager(this);
+        mCourseLayoutManager = new GridLayoutManager(this, 2);
 
         List<NoteInfo> notes = DataManager.getInstance().getNotes();
         mNoteRecyclerAdapter = new NoteRecyclerAdapter(this, notes);
+
+        List<CourseInfo> courses = DataManager.getInstance().getCourses();
+        mCourseRecyclerAdapter = new CourseRecyclerAdapter(this, courses);
+
         displayNotes();
     }
 
@@ -79,10 +87,20 @@ implements NavigationView.OnNavigationItemSelectedListener{
         mRecyclerItems.setLayoutManager(mNoteLayoutManager);
         mRecyclerItems.setAdapter(mNoteRecyclerAdapter);
 
+        selectNavigationMenuItem(R.id.nav_note);
+    }
+
+    private void selectNavigationMenuItem(int id) {
         NavigationView navigationView = findViewById(R.id.nav_view);
         Menu menu = navigationView.getMenu();
+        menu.findItem(id).setChecked(true);
+    }
 
-        menu.findItem(R.id.nav_note).setChecked(true);
+    private void displayCourses(){
+        mRecyclerItems.setLayoutManager(mCourseLayoutManager);
+        mRecyclerItems.setAdapter(mCourseRecyclerAdapter);
+
+        selectNavigationMenuItem(R.id.nav_courses);
     }
 
     @Override
@@ -111,19 +129,19 @@ implements NavigationView.OnNavigationItemSelectedListener{
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
+        if (id == R.id.nav_note)
+            displayNotes();
+        else if (id == R.id.nav_courses)
+            displayCourses();
+        else if (id == R.id.nav_share)
+            handleSelection("Share");
+        else if (id == R.id.nav_send)
+            handleSelection("Send");
 
-        switch (id){
-            case (R.id.nav_note):
-                displayNotes();
-            case (R.id.nav_courses):
-                handleSelection("Courses");
-            case (R.id.nav_share):
-                handleSelection("Share");
-            case (R.id.nav_send):
-                handleSelection("Send");
-            default:
-                return true;
-        }
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        drawerLayout.closeDrawer(GravityCompat.START);
+
+        return true;
     }
 
     private void handleSelection(String message) {
