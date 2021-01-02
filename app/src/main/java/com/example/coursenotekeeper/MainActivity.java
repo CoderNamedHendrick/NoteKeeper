@@ -1,5 +1,6 @@
 package com.example.coursenotekeeper;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -7,15 +8,12 @@ import android.view.Menu;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -28,6 +26,8 @@ public class MainActivity extends AppCompatActivity
 implements NavigationView.OnNavigationItemSelectedListener{
 
     private NoteRecyclerAdapter mNoteRecyclerAdapter;
+    private RecyclerView mRecyclerItems;
+    private LinearLayoutManager mNoteLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +40,8 @@ implements NavigationView.OnNavigationItemSelectedListener{
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                startActivity(new Intent(MainActivity.this, NoteActivity.class));
+
             }
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -67,13 +67,31 @@ implements NavigationView.OnNavigationItemSelectedListener{
     }
 
     private void InitialiseDisplayContent() {
-        final RecyclerView recyclerNote = (RecyclerView) findViewById(R.id.list_items);
-        final LinearLayoutManager noteLayoutManager = new LinearLayoutManager(this);
-        recyclerNote.setLayoutManager(noteLayoutManager);
+        mRecyclerItems = (RecyclerView) findViewById(R.id.list_items);
+        mNoteLayoutManager = new LinearLayoutManager(this);
 
         List<NoteInfo> notes = DataManager.getInstance().getNotes();
         mNoteRecyclerAdapter = new NoteRecyclerAdapter(this, notes);
-        recyclerNote.setAdapter(mNoteRecyclerAdapter);
+        displayNotes();
+    }
+
+    private void displayNotes() {
+        mRecyclerItems.setLayoutManager(mNoteLayoutManager);
+        mRecyclerItems.setAdapter(mNoteRecyclerAdapter);
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        Menu menu = navigationView.getMenu();
+
+        menu.findItem(R.id.nav_note).setChecked(true);
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START))
+            drawer.closeDrawer(GravityCompat.START);
+        else
+            super.onBackPressed();
     }
 
     @Override
@@ -95,14 +113,21 @@ implements NavigationView.OnNavigationItemSelectedListener{
         int id = item.getItemId();
 
         switch (id){
-            case (R.id.nav_home):
-                Toast.makeText(getApplicationContext(), "You clicked navigation home", Toast.LENGTH_SHORT).show();
-            case (R.id.nav_gallery):
-                Toast.makeText(getApplicationContext(), "You clicked navigation gallery", Toast.LENGTH_SHORT).show();
-            case (R.id.nav_slideshow):
-                Toast.makeText(getApplicationContext(), "You clicked navigation slideshow", Toast.LENGTH_SHORT).show();
+            case (R.id.nav_note):
+                displayNotes();
+            case (R.id.nav_courses):
+                handleSelection("Courses");
+            case (R.id.nav_share):
+                handleSelection("Share");
+            case (R.id.nav_send):
+                handleSelection("Send");
             default:
-                return false;
+                return true;
         }
+    }
+
+    private void handleSelection(String message) {
+        View view = findViewById(R.id.list_items);
+        Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
     }
 }
