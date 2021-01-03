@@ -72,7 +72,8 @@ implements NavigationView.OnNavigationItemSelectedListener{
     private void InitialiseDisplayContent() {
         mRecyclerItems = (RecyclerView) findViewById(R.id.list_items);
         mNoteLayoutManager = new LinearLayoutManager(this);
-        mCourseLayoutManager = new GridLayoutManager(this, 2);
+        mCourseLayoutManager = new GridLayoutManager(this,
+                getResources().getInteger(R.integer.course_grid_span));
 
         List<NoteInfo> notes = DataManager.getInstance().getNotes();
         mNoteRecyclerAdapter = new NoteRecyclerAdapter(this, notes);
