@@ -42,14 +42,20 @@ public class NextThroughNoteTest {
         onView(withId(R.id.list_items)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
         List<NoteInfo> notes = DataManager.getInstance().getNotes();
-        int index = 0;
-        NoteInfo note = notes.get(index);
+        for (int index = 0; index < notes.size(); index++){
 
-        onView(withId(R.id.spinner_courses)).check(
-                matches(withSpinnerText(note.getCourse().getTitle()))
-        );
-        onView(withId(R.id.text_note_title)).check(matches(withText(note.getTitle())));
-        onView(withId(R.id.text_note_text)).check(matches(withText(note.getText())));
+            NoteInfo note = notes.get(index);
 
+            onView(withId(R.id.spinner_courses)).check(
+                    matches(withSpinnerText(note.getCourse().getTitle()))
+            );
+            onView(withId(R.id.text_note_title)).check(matches(withText(note.getTitle())));
+            onView(withId(R.id.text_note_text)).check(matches(withText(note.getText())));
+
+            if (index < notes.size() - 1)
+                onView(allOf(withId(R.id.action_next), isEnabled())).perform(click());
+        }
+        onView(withId(R.id.action_next)).check(matches(not(isEnabled())));
+        pressBack();
     }
 }
