@@ -135,9 +135,9 @@ implements NavigationView.OnNavigationItemSelectedListener{
         else if (id == R.id.nav_courses)
             displayCourses();
         else if (id == R.id.nav_share)
-            handleSelection("Share");
+            handleSelection(getString(R.string.nav_share_message));
         else if (id == R.id.nav_send)
-            handleSelection("Send");
+            handleSelection(getString(R.string.nav_send_message));
 
         DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
         drawerLayout.closeDrawer(GravityCompat.START);
