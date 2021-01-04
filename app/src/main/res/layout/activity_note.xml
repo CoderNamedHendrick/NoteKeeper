@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            android:theme="@style/Theme.CourseNoteKeeper.PopupOverlay"/>
+            app:popupTheme="@style/Theme.CourseNoteKeeper.NoActionBar" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
