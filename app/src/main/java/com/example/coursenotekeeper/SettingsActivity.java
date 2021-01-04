@@ -82,19 +82,13 @@ public class SettingsActivity extends AppCompatActivity implements
         }
     }
 
-    public static class MessagesFragment extends PreferenceFragmentCompat {
+    public static class GeneralFragment extends PreferenceFragmentCompat{
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-            setPreferencesFromResource(R.xml.messages_preferences, rootKey);
+            setPreferencesFromResource(R.xml.pref_general, rootKey);
         }
     }
 
-    public static class SyncFragment extends PreferenceFragmentCompat {
 
-        @Override
-        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-            setPreferencesFromResource(R.xml.sync_preferences, rootKey);
-        }
-    }
 }
