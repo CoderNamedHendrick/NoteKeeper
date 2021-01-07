@@ -87,6 +87,27 @@ public class SettingsActivity extends AppCompatActivity implements
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.pref_general, rootKey);
+
+            Preference userDisplayName = findPreference("user_display_name");
+            findPreference("user_email_address");
+            findPreference("user_favourite_social");
+
+        }
+    }
+
+    public static class NotificationsFragment extends PreferenceFragmentCompat{
+
+        @Override
+        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+            setPreferencesFromResource(R.xml.pref_notifications, rootKey);
+        }
+    }
+
+    public static class SyncFragment extends PreferenceFragmentCompat{
+
+        @Override
+        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+            setPreferencesFromResource(R.xml.pref_sync, rootKey);
         }
     }
 
