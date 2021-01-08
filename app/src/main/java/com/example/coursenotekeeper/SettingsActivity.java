@@ -1,13 +1,17 @@
 package com.example.coursenotekeeper;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.preference.EditTextPreference;
+import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 
 public class SettingsActivity extends AppCompatActivity implements
         PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
@@ -82,16 +86,31 @@ public class SettingsActivity extends AppCompatActivity implements
         }
     }
 
-    public static class GeneralFragment extends PreferenceFragmentCompat{
+    public static class GeneralFragment extends PreferenceFragmentCompat
+    implements SharedPreferences.OnSharedPreferenceChangeListener {
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.pref_general, rootKey);
 
-            Preference userDisplayName = findPreference("user_display_name");
-            findPreference("user_email_address");
-            findPreference("user_favourite_social");
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+            onSharedPreferenceChanged(sharedPreferences, "user_display_name");
+            onSharedPreferenceChanged(sharedPreferences, "user_email_address");
+            onSharedPreferenceChanged(sharedPreferences, "user_favourite_social");
 
+        }
+
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            Preference preference = findPreference(key);
+
+            if (preference instanceof EditTextPreference){
+                EditTextPreference editTextPreference = (EditTextPreference) preference;
+                preference.setSummary(editTextPreference.getText());
+            } else if (preference instanceof ListPreference){
+                ListPreference listPreference = (ListPreference) preference;
+                preference.setSummary(listPreference.getEntry());
+            }
         }
     }
 
@@ -108,8 +127,10 @@ public class SettingsActivity extends AppCompatActivity implements
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.pref_sync, rootKey);
+
         }
     }
+
 
 
 }

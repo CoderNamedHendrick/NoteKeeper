@@ -5,20 +5,17 @@
     <EditTextPreference
         android:defaultValue="@string/default_display_name"
         android:key="user_display_name"
-        android:persistent="false"
         android:selectAllOnFocus="false"
         android:singleLine="true"
         android:title="@string/pref_title_display_name" />
     <EditTextPreference
         android:defaultValue="@string/default_email_address"
         android:key="user_email_address"
-        android:persistent="false"
         android:selectAllOnFocus="false"
         android:singleLine="true"
         android:title="@string/pref_title_email_address" />
     <ListPreference
         android:defaultValue="@string/pref_default_favourite_social"
-        android:persistent="false"
         android:entries="@array/pref_entries_favourite_social"
         android:entryValues="@array/pref_values_favourite_social"
         android:key="user_favourite_social"
