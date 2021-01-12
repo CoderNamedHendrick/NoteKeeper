@@ -18,6 +18,10 @@ public class NoteKeeperOpenHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(NoteKeeperDatabaseContract.CourseInfoEntry.SQL_CREATE_TABLE);
         db.execSQL(NoteKeeperDatabaseContract.NoteInfoEntry.SQL_CREATE_TABLE);
+
+        DatabaseDataWorker worker = new DatabaseDataWorker(db);
+        worker.insertCourses();
+        worker.insertSampleNotes();
     }
 
     @Override
