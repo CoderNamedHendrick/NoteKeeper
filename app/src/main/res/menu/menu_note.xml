@@ -16,5 +16,6 @@
         android:id="@+id/action_next"
         android:icon="@android:drawable/ic_media_next"
         android:title="Next"
+        android:visible="false"
         app:showAsAction="ifRoom|withText" />
 </menu>
