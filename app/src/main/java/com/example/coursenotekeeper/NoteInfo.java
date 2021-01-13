@@ -9,7 +9,7 @@ public final class NoteInfo implements Parcelable{
     private String mText;
     private int mId;
 
-    public NoteInfo(Integer id, CourseInfo course, String title, String text) {
+    public NoteInfo(int id, CourseInfo course, String title, String text) {
         mId = id;
         mCourse = course;
         mTitle = title;

@@ -29,7 +29,6 @@ public class DataManager {
 
         // Loading courses from the Courses table
         final String[] courseColumns = {
-
                 CourseInfoEntry.COLUMN_COURSE_ID,
                 CourseInfoEntry.COLUMN_COURSE_TITLE};
         final Cursor courseCursor = db.query(CourseInfoEntry.TABLE_NAME, courseColumns,
