@@ -129,16 +129,16 @@ public class NoteActivity extends AppCompatActivity {
         String noteTitle = mNoteCursor.getString(mNoteTitlePos);
         String noteText = mNoteCursor.getString(mNoteTextPos);
         List<CourseInfo> courses = DataManager.getInstance().getCourses();
-        int courseIndex = courses.indexOf(mNote.getCourse());
+        CourseInfo course = DataManager.getInstance().getCourse(courseId);
+        int courseIndex = courses.indexOf(course);
         mSpinnerCourses.setSelection(courseIndex);
-        mTextNoteTitle.setText(mNote.getTitle());
-        mTextNoteText.setText(mNote.getText());
+        mTextNoteTitle.setText(noteTitle);
+        mTextNoteText.setText(noteText);
     }
 
     private void readDisplayStateValues() {
         Intent intent = getIntent();
         mNotePosition = intent.getIntExtra(NOTE_POSITION, POSITION_NOT_SET);
-
         mIsNewNote = mNotePosition == POSITION_NOT_SET;
         if (mIsNewNote){
             createNewNote();
