@@ -1,6 +1,9 @@
 package com.example.coursenotekeeper;
 
+import android.app.LoaderManager;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -29,8 +32,10 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
-implements NavigationView.OnNavigationItemSelectedListener{
+        implements NavigationView.OnNavigationItemSelectedListener,
+        LoaderManager.LoaderCallbacks<Cursor> {
 
+    public static final int LOADER_NOTES = 2;
     private NoteRecyclerAdapter mNoteRecyclerAdapter;
     private RecyclerView mRecyclerItems;
     private LinearLayoutManager mNoteLayoutManager;
@@ -83,7 +88,8 @@ implements NavigationView.OnNavigationItemSelectedListener{
     protected void onResume() {
         super.onResume();
 //        mAdapterNotes.notifyDataSetChanged();
-        loadNotes();
+        getLoaderManager().restartLoader(LOADER_NOTES, null, this);
+
         updateNavHeader();
     }
 
@@ -204,5 +210,41 @@ implements NavigationView.OnNavigationItemSelectedListener{
     private void handleSelection(int message_id) {
         View view = findViewById(R.id.list_items);
         Snackbar.make(view, message_id, Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        CursorLoader loader = null;
+        if (id == LOADER_NOTES){
+            loader = new CursorLoader(this){
+                @Override
+                public Cursor loadInBackground() {
+                    SQLiteDatabase db = mDbOpenHelper.getReadableDatabase();
+                    final String[] noteColumns = {
+                            NoteInfoEntry.COLUMN_NOTE_TITLE,
+                            NoteInfoEntry.COLUMN_COURSE_ID,
+                            NoteInfoEntry._ID};
+                    String noteOrderBy = NoteInfoEntry.COLUMN_COURSE_ID+ "," + NoteInfoEntry.COLUMN_NOTE_TITLE;
+                    return db.query(NoteInfoEntry.TABLE_NAME, noteColumns,
+                            null, null, null, null, noteOrderBy);
+                }
+            };
+        }
+        return loader;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        if (loader.getId() == LOADER_NOTES){
+            mNoteRecyclerAdapter.changeCursor(data);
+        }
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        if (loader.getId() == LOADER_NOTES){
+            mNoteRecyclerAdapter.changeCursor(null);
+        }
     }
 }
