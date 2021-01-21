@@ -31,6 +31,8 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
+import static com.example.coursenotekeeper.NoteKeeperDatabaseContract.*;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         LoaderManager.LoaderCallbacks<Cursor> {
@@ -222,10 +224,20 @@ public class MainActivity extends AppCompatActivity
                     SQLiteDatabase db = mDbOpenHelper.getReadableDatabase();
                     final String[] noteColumns = {
                             NoteInfoEntry.COLUMN_NOTE_TITLE,
-                            NoteInfoEntry.COLUMN_COURSE_ID,
-                            NoteInfoEntry._ID};
-                    String noteOrderBy = NoteInfoEntry.COLUMN_COURSE_ID+ "," + NoteInfoEntry.COLUMN_NOTE_TITLE;
-                    return db.query(NoteInfoEntry.TABLE_NAME, noteColumns,
+                            NoteInfoEntry.getQName(NoteInfoEntry._ID),
+                            CourseInfoEntry.COLUMN_COURSE_TITLE
+                    };
+
+                    String noteOrderBy = CourseInfoEntry.COLUMN_COURSE_TITLE +
+                            "," + NoteInfoEntry.COLUMN_NOTE_TITLE;
+
+                    // note_info JOIN course_info ON note_info.course_id = course_info.course_id
+                    String tablesWithJoin = NoteInfoEntry.TABLE_NAME + " JOIN " +
+                            CourseInfoEntry.TABLE_NAME + " ON " +
+                            NoteInfoEntry.getQName(NoteInfoEntry.COLUMN_COURSE_ID) + " = " +
+                            CourseInfoEntry.getQName(CourseInfoEntry.COLUMN_COURSE_ID);
+
+                    return db.query(tablesWithJoin, noteColumns,
                             null, null, null, null, noteOrderBy);
                 }
             };
