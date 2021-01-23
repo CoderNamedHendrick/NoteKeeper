@@ -31,11 +31,17 @@ public class CourseNoteKeeperProvider extends ContentProvider {
 
     public static final int NOTES_ROW = 3;
 
+    public static final int COURSES_ROW = 4;
+
+    public static final int NOTES_EXPANDED_ROW = 5;
+
     static {
         sUriMatcher.addURI(CourseNoteKeeperProviderContract.AUTHORITY, Courses.PATH, COURSES);
         sUriMatcher.addURI(CourseNoteKeeperProviderContract.AUTHORITY, Notes.PATH, NOTES);
         sUriMatcher.addURI(CourseNoteKeeperProviderContract.AUTHORITY, Notes.PATH_EXPANDED, NOTES_EXPANDED);
         sUriMatcher.addURI(CourseNoteKeeperProviderContract.AUTHORITY, Notes.PATH + "/#", NOTES_ROW);
+        sUriMatcher.addURI(CourseNoteKeeperProviderContract.AUTHORITY, Courses.PATH + "/#", COURSES_ROW);
+        sUriMatcher.addURI(CourseNoteKeeperProviderContract.AUTHORITY, Notes.PATH_EXPANDED + "/#", NOTES_EXPANDED_ROW);
     }
 
     public CourseNoteKeeperProvider() {
@@ -43,8 +49,40 @@ public class CourseNoteKeeperProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        // Implement this to handle requests to delete one or more rows.
-        throw new UnsupportedOperationException("Not yet implemented");
+        long rowId = -1;
+        String rowSelection = null;
+        String[] rowSelectionArgs = null;
+        int nRows = -1;
+        SQLiteDatabase db = mDbOpenHelper.getReadableDatabase();
+
+        int uriMatch = sUriMatcher.match(uri);
+        switch(uriMatch) {
+            case COURSES:
+                nRows = db.delete(CourseInfoEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            case NOTES:
+                nRows = db.delete(NoteInfoEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            case NOTES_EXPANDED:
+                // throw exception saying that this is a read-only table
+            case COURSES_ROW:
+                rowId = ContentUris.parseId(uri);
+                rowSelection = CourseInfoEntry._ID + " = ?";
+                rowSelectionArgs = new String[]{Long.toString(rowId)};
+                nRows = db.delete(CourseInfoEntry.TABLE_NAME, rowSelection, rowSelectionArgs);
+                break;
+            case NOTES_ROW:
+                rowId = ContentUris.parseId(uri);
+                rowSelection = NoteInfoEntry._ID + " = ?";
+                rowSelectionArgs = new String[]{Long.toString(rowId)};
+                nRows = db.delete(NoteInfoEntry.TABLE_NAME, rowSelection, rowSelectionArgs);
+                break;
+            case NOTES_EXPANDED_ROW:
+                // throw exception saying that this is a read-only table
+                break;
+        }
+
+        return nRows;
     }
 
     @Override
@@ -131,6 +169,19 @@ public class CourseNoteKeeperProvider extends ContentProvider {
                 cursor = db.query(NoteInfoEntry.TABLE_NAME, projection, rowSelection,
                         rowSelectionArgs, null, null, null);
                 break;
+            case COURSES_ROW:
+                rowId = ContentUris.parseId(uri);
+                rowSelection = CourseInfoEntry._ID + " = ?";
+                rowSelectionArgs = new String[]{Long.toString(rowId)};
+                cursor = db.query(CourseInfoEntry.TABLE_NAME, projection, rowSelection,
+                        rowSelectionArgs, null, null, null);
+                break;
+            case NOTES_EXPANDED_ROW:
+                rowId = ContentUris.parseId(uri);
+                rowSelection = NoteInfoEntry.getQName(NoteInfoEntry._ID) + " = ?";
+                rowSelectionArgs = new String[]{Long.toString(rowId)};
+                cursor = notesExpandedQuery(db, projection, rowSelection, rowSelectionArgs, null);
+                break;
         }
 
         return cursor;
@@ -156,7 +207,39 @@ public class CourseNoteKeeperProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues values, String selection,
                       String[] selectionArgs) {
-        // TODO: Implement this to handle requests to update one or more rows.
-        throw new UnsupportedOperationException("Not yet implemented");
+        long rowId = -1;
+        String rowSelection = null;
+        String[] rowSelectionArgs = null;
+        int nRows = -1;
+        SQLiteDatabase db = mDbOpenHelper.getReadableDatabase();
+
+        int uriMatch = sUriMatcher.match(uri);
+        switch(uriMatch) {
+            case COURSES:
+                nRows = db.update(CourseInfoEntry.TABLE_NAME, values, selection, selectionArgs);
+                break;
+            case NOTES:
+                nRows = db.update(NoteInfoEntry.TABLE_NAME, values, selection, selectionArgs);
+                break;
+            case NOTES_EXPANDED:
+                // throw exception saying that this is a read-only table
+            case COURSES_ROW:
+                rowId = ContentUris.parseId(uri);
+                rowSelection = CourseInfoEntry._ID + " = ?";
+                rowSelectionArgs = new String[]{Long.toString(rowId)};
+                nRows = db.update(CourseInfoEntry.TABLE_NAME, values, rowSelection, rowSelectionArgs);
+                break;
+            case NOTES_ROW:
+                rowId = ContentUris.parseId(uri);
+                rowSelection = NoteInfoEntry._ID + " = ?";
+                rowSelectionArgs = new String[]{Long.toString(rowId)};
+                nRows = db.update(NoteInfoEntry.TABLE_NAME, values, rowSelection, rowSelectionArgs);
+                break;
+            case NOTES_EXPANDED_ROW:
+                // throw exception saying that this is a read-only table
+                break;
+        }
+
+        return nRows;
     }
 }
