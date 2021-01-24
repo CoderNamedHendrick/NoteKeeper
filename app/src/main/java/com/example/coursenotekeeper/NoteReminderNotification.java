@@ -2,7 +2,9 @@ package com.example.coursenotekeeper;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -31,10 +33,16 @@ public class NoteReminderNotification {
         }
     }
 
-    public static void reminderNotification(Context context, String noteText) {
+    public static void reminderNotification(Context context,
+                                            String noteTitle, String noteText, int noteId) {
         final Resources res = context.getResources();
 
         final Bitmap picture = BitmapFactory.decodeResource(res, R.drawable.logo);
+
+        Intent noteActivityIntent = new Intent(context, NoteActivity.class);
+        noteActivityIntent.putExtra(NoteActivity.NOTE_ID, noteId);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
+                noteActivityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(context
                 , CHANNEL_ID)
@@ -43,11 +51,26 @@ public class NoteReminderNotification {
                 .setContentTitle("Review note")
                 .setContentText(noteText)
                 .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText(noteText))
+                        .bigText(noteText)
+                        .setBigContentTitle(noteTitle)
+                        .setSummaryText("Review note")
+                )
+                .setContentIntent(pendingIntent)
+                .addAction(
+                        0,
+                        "View all notes",
+                        PendingIntent.getActivity(
+                                context,
+                                0,
+                                new Intent(context, MainActivity.class),
+                                PendingIntent.FLAG_UPDATE_CURRENT)
+                )
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setTicker("Review note")
                 .setAutoCancel(true);
 
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
+        NotificationManagerCompat notificationManagerCompat =
+                NotificationManagerCompat.from(context);
 
         notificationManagerCompat.notify(NoteActivity.notificationId, builder.build());
     }

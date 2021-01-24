@@ -70,8 +70,6 @@
     <string name="cancel_text">Cancel</string>
     <string name="next_text">Next</string>
     <string name="set_reminder_text">Set reminder</string>
-    <string name="notify_title">Note reminder: {exampleString}</string>
-    <string name="notify_text">You said {exampleString} and lorem ipsum dolor sit amet...</string>
     <string name="channel_name">Review note channel</string>
     <string name="channel_description">This channel displays a notification for reviewing notes</string>
 
