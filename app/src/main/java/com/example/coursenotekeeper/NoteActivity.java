@@ -34,6 +34,7 @@ public class NoteActivity extends AppCompatActivity
 
     public static final int LOADER_NOTES = 0;
     public static final int LOADER_COURSES = 1;
+    public static final String CHANNEL_ID = "review_note_channel";
     private final String TAG = getClass().getSimpleName();
     public static final String NOTE_ID = "com.example.coursenotekeeper.NOTE_POSITION";
     public static final String ORIGINAL_NOTE_COURSE_ID = "com.example.coursenotekeeper.ORIGINAL_NOTE_COURSE_ID";
@@ -59,6 +60,7 @@ public class NoteActivity extends AppCompatActivity
     private boolean mCoursesQueryFinished;
     private boolean mNotesQueryFinished;
     private Uri mNoteUri;
+    public static final int notificationId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +72,7 @@ public class NoteActivity extends AppCompatActivity
         mDbOpenHelper = new NoteKeeperOpenHelper(this);
         mSpinnerCourses = findViewById(R.id.spinner_courses);
 
-
+        NoteReminderNotification.createNotificationChannel(this);
         mAdapterCourses = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item,
                 null,
                 new String[] {CourseInfoEntry.COLUMN_COURSE_TITLE},
@@ -106,6 +108,8 @@ public class NoteActivity extends AppCompatActivity
                 null, null, null, null, CourseInfoEntry.COLUMN_COURSE_TITLE);
         mAdapterCourses.changeCursor(cursor);
     }
+
+
 
     private void restoreOriginalNoteValues(Bundle savedInstanceState) {
         mOriginalNoteCourseId = savedInstanceState.getString(ORIGINAL_NOTE_COURSE_ID);
@@ -213,10 +217,18 @@ public class NoteActivity extends AppCompatActivity
             finish();
         }else if (id == R.id.action_next){
             moveNext();
+        } else if (id == R.id.action_set_reminder){
+            showReminderNotification();
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+    private void showReminderNotification() {
+        String noteText = mTextNoteText.getText().toString();
+        NoteReminderNotification.reminderNotification(this, noteText);
+    }
+
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {

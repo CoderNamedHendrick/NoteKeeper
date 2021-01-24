@@ -5,17 +5,21 @@
 
     <item
         android:id="@+id/action_send_mail"
-        android:title="Send as Email"
+        android:title="@string/send_as_email_text"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_cancel"
         android:icon="@android:drawable/ic_menu_revert"
-        android:title="Cancel"
+        android:title="@string/cancel_text"
         app:showAsAction="ifRoom|withText" />
     <item
         android:id="@+id/action_next"
         android:icon="@android:drawable/ic_media_next"
-        android:title="Next"
+        android:title="@string/next_text"
         android:visible="false"
         app:showAsAction="ifRoom|withText" />
+    <item
+        android:id="@+id/action_set_reminder"
+        android:title="@string/set_reminder_text"
+        app:showAsAction="never"/>
 </menu>
