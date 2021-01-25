@@ -9,4 +9,7 @@
     <item
         android:id="@+id/action_backup_notes"
         android:title="@string/backup_notes_text" />
+    <item
+        android:id="@+id/action_upload_notes"
+        android:title="@string/upload_notes_item_text" />
 </menu>

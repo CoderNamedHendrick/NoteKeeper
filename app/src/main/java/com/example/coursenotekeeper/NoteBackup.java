@@ -24,10 +24,10 @@ public class NoteBackup {
             selectionArgs = new String[] {backupCourseId};
         }
 
-        Cursor cursor = context.getContentResolver().query(Notes.CONTENT_URI,
+        Cursor cursor = context.getContentResolver().query(Notes.CONTENT_EXPANDED_URI,
                 columns, selection, selectionArgs, null);
         int courseIdPos = cursor.getColumnIndex(Notes.COLUMN_COURSE_ID);
-        int noteTitlePos = cursor.getColumnIndex(Notes.COLUMN_COURSE_TITLE);
+        int noteTitlePos = cursor.getColumnIndex(Notes.COLUMN_NOTE_TITLE);
         int noteTextPos = cursor.getColumnIndex(Notes.COLUMN_NOTE_TEXT);
 
         Log.i(TAG, ">>>>>****   BACKUP START - Thread: " + Thread.currentThread().getId() +
@@ -50,7 +50,7 @@ public class NoteBackup {
     private static void simulateLongRunningWork() {
         Thread thread = Thread.currentThread();
         try {
-            thread.sleep(700);
+            thread.sleep(1400);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
