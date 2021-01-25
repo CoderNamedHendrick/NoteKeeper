@@ -9,11 +9,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CourseNoteKeeper">
+        <service
+            android:name=".NoteBackupService"
+            android:exported="false"></service>
+
         <provider
             android:name=".CourseNoteKeeperProvider"
             android:authorities="com.example.coursenotekeeper.provider"
             android:enabled="true"
-            android:exported="true"></provider>
+            android:exported="true" />
 
         <activity
             android:name=".SettingsActivity"

@@ -72,5 +72,6 @@
     <string name="set_reminder_text">Set reminder</string>
     <string name="channel_name">Review note channel</string>
     <string name="channel_description">This channel displays a notification for reviewing notes</string>
+    <string name="backup_notes_text">Backup notes</string>
 
 </resources>
