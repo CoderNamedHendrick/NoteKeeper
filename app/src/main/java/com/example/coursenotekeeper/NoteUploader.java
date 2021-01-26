@@ -51,11 +51,16 @@ public class NoteUploader {
                 simulateLongRunningWork();
             }
         }
+        if (mCanceled)
+            Log.i(TAG, ">>>>*** UPLOAD !!CANCELED!! - " + dataUri + " ***<<<<");
+        else
+            Log.i(TAG, ">>>>*** UPLOAD COMPLETE - " + dataUri + " ***<<<<");
+        cursor.close();
     }
 
     private void simulateLongRunningWork() {
         try {
-            Thread.sleep(1300);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
