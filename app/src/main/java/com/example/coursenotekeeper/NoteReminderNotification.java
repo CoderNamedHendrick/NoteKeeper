@@ -59,6 +59,10 @@ public class NoteReminderNotification {
                         .setSummaryText("Review note")
                 )
                 .setContentIntent(pendingIntent)
+                .addAction(0,
+                        "View note",
+                        pendingIntent
+                )
                 .addAction(
                         0,
                         "View all notes",
