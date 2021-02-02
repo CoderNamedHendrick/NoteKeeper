@@ -304,7 +304,7 @@ public class NoteActivity extends AppCompatActivity
         long ONE_HOUR = 60 * 60 * 1000;
         long TEN_SECONDS = 10 * 1000;
 
-        long alarmTime = currentTimeInMilliSeconds + TEN_SECONDS;
+        long alarmTime = currentTimeInMilliSeconds + ONE_HOUR;
         alarmManager.set(AlarmManager.ELAPSED_REALTIME, alarmTime, pendingIntent);
     }
 
