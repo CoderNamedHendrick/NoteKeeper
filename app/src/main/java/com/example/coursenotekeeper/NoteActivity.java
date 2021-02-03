@@ -41,6 +41,7 @@ public class NoteActivity extends AppCompatActivity
     public static final int LOADER_NOTES = 0;
     public static final int LOADER_COURSES = 1;
     public static final String CHANNEL_ID = "review_note_channel";
+    private static final String NOTE_URI = "com.example.coursenotekeeper.NOTE_URI";
     private final String TAG = getClass().getSimpleName();
     public static final String NOTE_ID = "com.example.coursenotekeeper.NOTE_POSITION";
     public static final String ORIGINAL_NOTE_COURSE_ID = "com.example.coursenotekeeper.ORIGINAL_NOTE_COURSE_ID";
@@ -91,8 +92,11 @@ public class NoteActivity extends AppCompatActivity
         readDisplayStateValues();
         if (savedInstanceState == null)
             saveOriginalNoteValues();
-        else
+        else {
             restoreOriginalNoteValues(savedInstanceState);
+            String stringNoteUri = savedInstanceState.getString(NOTE_URI);
+            mNoteUri = Uri.parse(stringNoteUri);
+        }
 
         mTextNoteTitle = findViewById(R.id.text_note_title);
         mTextNoteText = findViewById(R.id.text_note_text);
@@ -143,6 +147,7 @@ public class NoteActivity extends AppCompatActivity
         outState.putString(ORIGINAL_NOTE_COURSE_ID, mOriginalNoteCourseId);
         outState.putString(ORIGINAL_NOTE_TITLE, mOriginalNoteTitle);
         outState.putString(ORIGINAL_NOTE_TEXT, mOriginalNoteText);
+        outState.putString(NOTE_URI, mNoteUri.toString());
     }
 
     private void saveOriginalNoteValues() {
