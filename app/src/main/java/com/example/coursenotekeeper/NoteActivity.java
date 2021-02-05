@@ -68,9 +68,11 @@ public class NoteActivity extends AppCompatActivity
     private boolean mNotesQueryFinished;
     private Uri mNoteUri;
     public static final int notificationId = 0;
+    private ModuleStatusView mViewModuleStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "****************************** OnCreate ******************************");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -103,7 +105,20 @@ public class NoteActivity extends AppCompatActivity
 
         if (!mIsNewNote)
             getLoaderManager().initLoader(LOADER_NOTES, null, this);
-        Log.d(TAG, "******************************OnCreate******************************");
+
+        mViewModuleStatus = findViewById(R.id.module_status);
+        LoadModuleStatusValues();
+    }
+
+    private void LoadModuleStatusValues() {
+        // In real life we'd lookup the selected course's module statuses from the content provider
+        int totalNumberOfModules = 11;
+        int completedNumberOfModules = 7;
+        boolean[] moduleStatus = new boolean[totalNumberOfModules];
+        for (int moduleIndex = 0; moduleIndex < completedNumberOfModules; moduleIndex++)
+            moduleStatus[moduleIndex] = true;
+
+        mViewModuleStatus.setModuleStatus(moduleStatus);
     }
 
     private void loadCourseData() {
