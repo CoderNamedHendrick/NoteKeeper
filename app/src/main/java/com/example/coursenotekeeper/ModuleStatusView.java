@@ -28,6 +28,7 @@ public class ModuleStatusView extends View {
     private int mFillColor;
     private Paint mPaintFill;
     private float mRadius;
+    private int mMaxHorizontalModule;
 
 
     public boolean[] getModuleStatus() {
@@ -70,7 +71,6 @@ public class ModuleStatusView extends View {
         mShapeSize = 144f;
         mSpacing = 30f;
         mRadius = (mShapeSize - mOutlineWidth)/2;
-        setupModuleRectangle();
 
         mOutlineColor = Color.BLACK;
         mPaintOutline = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -94,12 +94,17 @@ public class ModuleStatusView extends View {
         setModuleStatus(exampleModuleValues);
     }
 
-    private void setupModuleRectangle() {
+    private void setupModuleRectangle(int width) {
+        int availableWidth = width - getPaddingLeft() - getPaddingRight();
+        int horizontalWidthThatCanFit = (int) (availableWidth / (mShapeSize + mSpacing));
+        int maxHorizontalModules = Math.min(horizontalWidthThatCanFit, mModuleStatus.length);
         mModuleRectangles = new Rect[mModuleStatus.length];
         
         for (int moduleIndex=0; moduleIndex < mModuleRectangles.length; moduleIndex++){
-            int x = getPaddingLeft() + (int) (moduleIndex * (mShapeSize + mSpacing));
-            int y = getPaddingTop();
+            int column = moduleIndex % maxHorizontalModules;
+            int row = moduleIndex / maxHorizontalModules;
+            int x = getPaddingLeft() + (int) (column * (mShapeSize + mSpacing));
+            int y = getPaddingTop() + (int) (row * (mShapeSize + mSpacing));
             mModuleRectangles[moduleIndex] = new Rect(x, y,
                     x + (int) mShapeSize, y + (int) mShapeSize);
         }
@@ -110,16 +115,28 @@ public class ModuleStatusView extends View {
         int desiredWidth = 0;
         int desiredHeight = 0;
 
-        desiredWidth = (int) ((mModuleStatus.length * (mShapeSize + mSpacing)) - mSpacing);
+        int specWidth = MeasureSpec.getSize(widthMeasureSpec);
+        int availableWidth = specWidth - getPaddingLeft() - getPaddingRight();
+        int horizontalModuleThatCanFit = (int) (availableWidth / (mShapeSize + mSpacing));
+        mMaxHorizontalModule = Math.min(horizontalModuleThatCanFit, mModuleStatus.length);
+
+
+        desiredWidth = (int) ((mMaxHorizontalModule * (mShapeSize + mSpacing)) - mSpacing);
         desiredWidth += getPaddingLeft() + getPaddingRight();
 
-        desiredHeight = (int) mShapeSize;
+        int rows = ((mModuleStatus.length - 1) / mMaxHorizontalModule) + 1;
+        desiredHeight = (int) ((rows * (mShapeSize + mSpacing)) - mSpacing);
         desiredHeight += getPaddingTop() + getPaddingBottom();
 
         int width = resolveSizeAndState(desiredWidth, widthMeasureSpec, 0);
         int height =  resolveSizeAndState(desiredHeight, heightMeasureSpec, 0);
 
         setMeasuredDimension(width, height);
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        setupModuleRectangle(w);
     }
 
     @Override
