@@ -58,4 +58,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.example.coursenotekeeper.ModuleStatusView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/text_note_text"
+        app:layout_constraintStart_toStartOf="@+id/text_note_text"
+        app:layout_constraintTop_toBottomOf="@+id/text_note_text"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
