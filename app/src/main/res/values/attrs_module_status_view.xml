@@ -1,8 +1,9 @@
 <resources>
     <declare-styleable name="ModuleStatusView">
-        <attr name="exampleString" format="string" />
-        <attr name="exampleDimension" format="dimension" />
-        <attr name="exampleColor" format="color" />
-        <attr name="exampleDrawable" format="color|reference" />
+        <attr name="outlineColor" format="color" />
+        <attr name="shape" format="enum">
+            <enum name="circle" value="0"/>
+            <enum name="square" value="1"/>
+        </attr>
     </declare-styleable>
 </resources>

@@ -16,6 +16,7 @@ import android.view.View;
 public class ModuleStatusView extends View {
     public static final int EDIT_MODE_MODULE_COUNT = 7;
     public static final int INVALID_INDEX = -1;
+    public static final int SHAPE_CIRCLE = 0;
     private float mOutlineWidth;
     private float mShapeSize;
     private float mSpacing;
@@ -26,6 +27,7 @@ public class ModuleStatusView extends View {
     private Paint mPaintFill;
     private float mRadius;
     private int mMaxHorizontalModule;
+    private int mShape;
 
 
     public boolean[] getModuleStatus() {
@@ -62,6 +64,8 @@ public class ModuleStatusView extends View {
         final TypedArray a = getContext().obtainStyledAttributes(
                 attrs, R.styleable.ModuleStatusView, defStyle, 0);
 
+        mOutlineColor = a.getColor(R.styleable.ModuleStatusView_outlineColor, Color.BLACK);
+        mShape = a.getInt(R.styleable.ModuleStatusView_shape, SHAPE_CIRCLE);
         a.recycle();
 
         mOutlineWidth = 6f;
@@ -69,7 +73,6 @@ public class ModuleStatusView extends View {
         mSpacing = 30f;
         mRadius = (mShapeSize - mOutlineWidth) / 2;
 
-        mOutlineColor = Color.BLACK;
         mPaintOutline = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaintOutline.setStyle(Paint.Style.STROKE);
         mPaintOutline.setStrokeWidth(mOutlineWidth);
@@ -143,12 +146,27 @@ public class ModuleStatusView extends View {
         for (int moduleIndex = 0; moduleIndex < mModuleRectangles.length; moduleIndex++) {
             float x = mModuleRectangles[moduleIndex].centerX();
             float y = mModuleRectangles[moduleIndex].centerY();
-
-            if (mModuleStatus[moduleIndex])
-                canvas.drawCircle(x, y, mRadius, mPaintFill);
-
-            canvas.drawCircle(x, y, mRadius, mPaintOutline);
+            if (mShape == SHAPE_CIRCLE){
+                if (mModuleStatus[moduleIndex])
+                    canvas.drawCircle(x, y, mRadius, mPaintFill);
+                canvas.drawCircle(x, y, mRadius, mPaintOutline);
+            }else {
+                drawSquare(canvas, moduleIndex);
+            }
         }
+    }
+
+    private void drawSquare(Canvas canvas, int moduleIndex){
+        Rect moduleRectangle = mModuleRectangles[moduleIndex];
+
+        if (mModuleStatus[moduleIndex])
+            canvas.drawRect(moduleRectangle, mPaintFill);
+
+        canvas.drawRect(moduleRectangle.left + (mOutlineWidth/2),
+                moduleRectangle.top + (mOutlineWidth/2),
+                moduleRectangle.right - (mOutlineWidth/2),
+                moduleRectangle.bottom - (mOutlineWidth/2),
+                mPaintOutline);
     }
 
     @Override
