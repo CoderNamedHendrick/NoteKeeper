@@ -105,6 +105,22 @@ public class ModuleStatusView extends View {
         }
     }
 
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int desiredWidth = 0;
+        int desiredHeight = 0;
+
+        desiredWidth = (int) ((mModuleStatus.length * (mShapeSize + mSpacing)) - mSpacing);
+        desiredWidth += getPaddingLeft() + getPaddingRight();
+
+        desiredHeight = (int) mShapeSize;
+        desiredHeight += getPaddingTop() + getPaddingBottom();
+
+        int width = resolveSizeAndState(desiredWidth, widthMeasureSpec, 0);
+        int height =  resolveSizeAndState(desiredHeight, heightMeasureSpec, 0);
+
+        setMeasuredDimension(width, height);
+    }
 
     @Override
     protected void onDraw(Canvas canvas) {

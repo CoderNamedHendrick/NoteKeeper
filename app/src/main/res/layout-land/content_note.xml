@@ -63,4 +63,13 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_begin="342dp" />
+
+    <com.example.coursenotekeeper.ModuleStatusView
+        android:id="@+id/module_status"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="17dp"
+        app:layout_constraintEnd_toEndOf="@+id/text_note_title"
+        app:layout_constraintStart_toStartOf="@+id/text_note_title"
+        app:layout_constraintTop_toBottomOf="@+id/text_note_title" />
 </androidx.constraintlayout.widget.ConstraintLayout>
