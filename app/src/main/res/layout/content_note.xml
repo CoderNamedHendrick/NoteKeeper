@@ -72,7 +72,7 @@
         app:layout_constraintStart_toStartOf="@+id/text_note_text"
         app:layout_constraintTop_toBottomOf="@+id/text_note_text"
         app:outlineColor="@color/primary"
-        app:outlineWidth="6dp"
+        app:outlineWidth="3dp"
         app:shape="circle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
