@@ -71,8 +71,8 @@
         app:layout_constraintEnd_toEndOf="@+id/text_note_text"
         app:layout_constraintStart_toStartOf="@+id/text_note_text"
         app:layout_constraintTop_toBottomOf="@+id/text_note_text"
-        app:outlineColor="@android:color/holo_green_dark"
-        app:outlineWidth="5dp"
-        app:shape="square" />
+        app:outlineColor="@color/primary"
+        app:outlineWidth="6dp"
+        app:shape="circle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
